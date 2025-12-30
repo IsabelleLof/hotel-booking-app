@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# StayEase - Hotel Booking Application
+
+This is a comprehensive hotel booking application built with Next.js, TypeScript, and Tailwind CSS. It features hotel search, details view, booking management, and authentication.
+
+## Features
+
+- **Search**: Find hotels by location, dates, and guests.
+- **Details**: View comprehensive hotel information, amenities, and location.
+- **Booking**: Book hotels (simulated) and view them in your profile.
+- **Authentication**: Sign in with Google or use the Demo User for testing.
+- **Responsive Design**: Fully responsive UI with a premium look and feel.
+
+## Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **State Management**: Zustand
+- **Authentication**: NextAuth.js
+- **Testing**: Jest & React Testing Library
+- **Icons**: React Icons
+- **Animations**: Framer Motion
 
 ## Getting Started
 
-First, run the development server:
+1.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+2.  **Run the development server**:
+    ```bash
+    npm run dev
+    ```
+
+3.  **Open [http://localhost:3000](http://localhost:3000)** with your browser.
+
+## API & Data
+
+The application currently uses a **Mock API** (`src/lib/api.ts`) to simulate external data fetching. This ensures the application is fully functional for demonstration purposes without requiring API keys.
+
+To switch to a real API (e.g., Amadeus), you would:
+1.  Obtain an API Key from the provider.
+2.  Update `src/lib/api.ts` to make real HTTP requests using `axios`.
+3.  Set environment variables in `.env.local`.
+
+## Authentication
+
+For the Google Login to work, you need to set up a Google Cloud Project and add the credentials to `.env.local`:
+
+```env
+GOOGLE_CLIENT_ID=your-client-id
+GOOGLE_CLIENT_SECRET=your-client-secret
+NEXTAUTH_SECRET=your-secret-key
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**For testing/demo purposes, use the "Sign in as Demo User" button on the login page.**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Testing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Run the test suite with:
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm test
+```
