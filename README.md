@@ -241,6 +241,9 @@ I used **Next.js API routes** as a server layer between the client and the exter
 * Add caching strategies for repeated searches
 * Further simplify and standardize data transformation logic
 
+Write more of:
+* Scalability? Be more clearer on WHY (underhållbarhet?) trade-offs?
+
 ---
 
 ## Note on AI Tools
@@ -268,7 +271,4 @@ Tests:
 npm test
 ```
 
----
-
-Vill du att jag även gör en **kort version (max ~1 sida)** som du kan lämna in om du vill hålla den tight — och en **VG-fokuserad version** där jag lägger mer tyngd på skalbarhet/underhållbarhet och tydligare trade-offs?
 
