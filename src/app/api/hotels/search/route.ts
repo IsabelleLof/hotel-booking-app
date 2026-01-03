@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import Amadeus from "amadeus";
+import { mapAmadeusToHotel } from "@/lib/mappers";
 
 // ✅ Viktigt: Amadeus SDK behöver Node runtime (inte Edge)
 export const runtime = "nodejs";
@@ -63,7 +64,6 @@ export async function GET(req: Request) {
     if (!hotelIds) return NextResponse.json([], { status: 200 });
 
     // 3) Offers (skicka datum om vi har dem)
-    // Obs: vissa konton/endpoints kan kräva checkInDate/checkOutDate -> bra att skicka när du har.
     const offers = await amadeus.shopping.hotelOffersSearch.get({
       hotelIds,
       adults,
@@ -71,29 +71,8 @@ export async function GET(req: Request) {
       ...(checkOutDate ? { checkOutDate } : {}),
     });
 
-    // Transform Amadeus response to Hotel interface
-    const hotels = (offers.data ?? []).map((hotelOffer: any) => {
-      const hotel = hotelOffer.hotel;
-      const firstOffer = hotelOffer.offers?.[0];
-      
-      return {
-        id: hotel.hotelId,
-        name: hotel.name || 'Hotel',
-        location: {
-          city: hotel.cityCode || '',
-          country: hotel.address?.countryCode || '',
-          address: hotel.address?.lines?.join(', ') || '',
-          latitude: hotel.latitude || 0,
-          longitude: hotel.longitude || 0,
-        },
-        description: hotel.description?.text || firstOffer?.room?.description?.text || 'No description available',
-        rating: 4, // Amadeus doesn't provide ratings in this endpoint
-        pricePerNight: firstOffer?.price?.total ? parseFloat(firstOffer.price.total) : 0,
-        amenities: hotel.amenities || ['WiFi', 'Air Conditioning'],
-        image: hotel.media?.[0]?.uri || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=1000',
-        available: hotelOffer.available ?? true,
-      };
-    });
+    // Transform Amadeus response to Hotel interface using shared mapper
+    const hotels = (offers.data ?? []).map(mapAmadeusToHotel);
 
     return NextResponse.json(hotels, { status: 200 });
   } catch (err: any) {
@@ -102,12 +81,9 @@ export async function GET(req: Request) {
       err?.response?.status ||
       500;
 
-    // Om det är ett vanligt Error-objekt: visa message/stack (annars blir stringify ofta "{}")
     if (err instanceof Error) {
       console.error("Amadeus error status:", status);
       console.error("Amadeus error message:", err.message);
-      console.error("Amadeus error stack:", err.stack);
-
       return NextResponse.json(
         { message: "Amadeus error", status, details: err.message },
         { status }
@@ -121,10 +97,7 @@ export async function GET(req: Request) {
       err?.description ??
       err;
 
-    const details =
-      typeof raw === "string"
-        ? raw
-        : JSON.stringify(raw, null, 2);
+    const details = typeof raw === "string" ? raw : JSON.stringify(raw, null, 2);
 
     console.error("Amadeus error status:", status);
     console.error("Amadeus error details:", details);
@@ -135,6 +108,3 @@ export async function GET(req: Request) {
     );
   }
 }
-
-
-

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Amadeus from "amadeus";
 import { MOCK_HOTELS } from "@/lib/mockData";
+import { mapAmadeusToHotel } from "@/lib/mappers";
 
 // Amadeus SDK requires Node runtime
 export const runtime = "nodejs";
@@ -20,9 +21,9 @@ function toYMD(value: string | null) {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> } // ✅ Next 16.1: params kan vara en Promise
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params; // ✅ unwrap params
+  const { id } = await params;
 
   // Fallback to mock if no keys
   if (
@@ -34,7 +35,6 @@ export async function GET(
   }
 
   try {
-    // Läs optional query params (om du vill skicka datum/guests från UI)
     const adults = request.nextUrl.searchParams.get("adults") ?? "2";
     const checkInDate = toYMD(request.nextUrl.searchParams.get("checkIn"));
     const checkOutDate = toYMD(request.nextUrl.searchParams.get("checkOut"));
@@ -50,31 +50,8 @@ export async function GET(
     const hotelOffer = response.data?.[0];
     if (!hotelOffer) return NextResponse.json(null, { status: 404 });
 
-    const hotel = hotelOffer.hotel;
-    const firstOffer = hotelOffer.offers?.[0];
-
-    const hotelData = {
-      id: hotel.hotelId,
-      name: hotel.name || "Hotel",
-      location: {
-        city: hotel.cityCode || "",
-        country: hotel.address?.countryCode || "",
-        address: hotel.address?.lines?.join(", ") || "",
-        latitude: hotel.latitude || 0,
-        longitude: hotel.longitude || 0,
-      },
-      description:
-        hotel.description?.text ||
-        firstOffer?.room?.description?.text ||
-        "No description available",
-      rating: 4, // Amadeus doesn't provide ratings in this endpoint
-      pricePerNight: firstOffer?.price?.total ? parseFloat(firstOffer.price.total) : 0,
-      amenities: hotel.amenities || ["WiFi", "Air Conditioning"],
-      image:
-        hotel.media?.[0]?.uri ||
-        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=1000",
-      available: hotelOffer.available ?? true,
-    };
+    // Transform Amadeus response to Hotel interface using shared mapper
+    const hotelData = mapAmadeusToHotel(hotelOffer);
 
     return NextResponse.json(hotelData, { status: 200 });
   } catch (error: any) {
@@ -94,4 +71,3 @@ export async function GET(
     );
   }
 }
-
