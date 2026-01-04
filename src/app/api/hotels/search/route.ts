@@ -57,7 +57,7 @@ export async function GET(req: Request) {
     const list = await amadeus.referenceData.locations.hotels.byCity.get({ cityCode });
 
     const hotelIds = (list.data ?? [])
-      .slice(0, 10)
+      .slice(0, 25)
       .map((h: any) => h.hotelId)
       .join(",");
 

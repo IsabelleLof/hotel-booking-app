@@ -9,6 +9,14 @@ export type HotelLocation = {
   longitude: number;
 };
 
+export type Review = {
+  id: string;
+  userName: string;
+  rating: number;
+  comment: string;
+  date: string;
+};
+
 export type Hotel = {
   id: string;
   name: string;
@@ -16,11 +24,20 @@ export type Hotel = {
 
   description?: string;
   rating?: number;
+  stars?: number;
+  reviewCount?: number;
+  reviews?: Review[];
 
   pricePerNight?: number;
   amenities?: string[];
-  image?: string;
+  image: string; // Made required as we always provide a fallback or API uri
+  gallery?: string[];
 
   available?: boolean;
+  policies?: {
+    checkIn?: string;
+    checkOut?: string;
+    cancellation?: string;
+  };
 };
 
