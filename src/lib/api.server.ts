@@ -14,3 +14,10 @@ export async function getHotelByIdServer(id: string) {
   if (!res.ok) return undefined;
   return res.json();
 }
+
+export async function searchHotelsServer(query: string) {
+  const baseUrl = await getBaseUrl();
+  const res = await fetch(`${baseUrl}/api/hotels/search?q=${query}&adults=1`, { cache: "no-store" });
+  if (!res.ok) return [];
+  return res.json();
+}

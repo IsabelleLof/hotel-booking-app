@@ -1,3 +1,6 @@
+
+![Overview of the app arcitecture](image.png)
+
 # Delivery 2 – Documentation and Technical Reflection
 
 **Project:** StayEase (Hotel Finder / Booking App)
@@ -195,12 +198,11 @@ The goal was to keep responsibilities clear:
 
 ### What I Tested and Why
 
-(Adjust to your actual tests)
+* **Component tests** for reusable UI components (e.g., Button renders correctly, handles click events, and applies the correct variant styling).
 
-* **Component tests** for reusable UI components (e.g., `HotelCard` renders correct fields).
-* **Logic/function tests** for utilities (e.g., date formatting or response transformation).
+These tests verify core UI behavior such as accessibility (rendering with correct role and label), interaction (click handling), and visual consistency (Tailwind variant classes).
 
-These tests provide quick feedback and protect core UI and data-handling behavior.
+These tests provide quick feedback during development and help prevent regressions when refactoring shared UI components that are used across multiple pages.
 
 ### What I Would Test Next
 

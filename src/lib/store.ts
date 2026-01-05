@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Hotel } from './mockData';
+import { Hotel } from "@/types/hotels";
 
 interface Booking {
   id: string;

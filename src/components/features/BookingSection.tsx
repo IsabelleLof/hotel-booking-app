@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Hotel } from '@/lib/mockData';
+import { Hotel } from "@/types/hotels";
 import { useStore } from '@/lib/store';
 import Button from '../ui/Button';
 import DatePicker from 'react-datepicker';
@@ -40,7 +40,7 @@ export default function BookingSection({ hotel }: BookingSectionProps) {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     const days = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-    const totalPrice = days * hotel.pricePerNight;
+    const totalPrice = days * (hotel.pricePerNight ?? 0);
 
     addBooking({
       id: Math.random().toString(36).substr(2, 9),
@@ -59,7 +59,7 @@ export default function BookingSection({ hotel }: BookingSectionProps) {
   return (
     <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 sticky top-24">
       <div className="mb-6">
-        <span className="text-3xl font-bold text-gray-900">{hotel.pricePerNight} SEK</span>
+        <span className="text-3xl font-bold text-gray-900">{hotel.pricePerNight ?? 0} SEK</span>
         <span className="text-gray-500"> / night</span>
       </div>
 
@@ -103,7 +103,7 @@ export default function BookingSection({ hotel }: BookingSectionProps) {
           <span>Total</span>
           <span>
             {startDate && endDate 
-              ? `${Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) * hotel.pricePerNight} SEK` 
+              ? `${Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) * (hotel.pricePerNight ?? 0)} SEK` 
               : '---'}
           </span>
         </div>

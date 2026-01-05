@@ -1,11 +1,13 @@
 import SearchForm from '@/components/features/SearchForm';
 import HotelCard from '@/components/features/HotelCard';
-import { MOCK_HOTELS } from '@/lib/mockData';
+import { searchHotelsServer } from '@/lib/api.server';
 import { FaFire } from 'react-icons/fa';
+import { Hotel } from '@/types/hotels';
 
-export default function Home() {
-  // In a real app, we might fetch featured hotels from API
-  const featuredHotels = MOCK_HOTELS.slice(0, 3);
+export default async function Home() {
+  // Fetch real trending hotels (e.g., from Stockholm)
+  const featuredHotels: Hotel[] = await searchHotelsServer('Stockholm');
+  const displayHotels = featuredHotels.slice(0, 3);
 
   return (
     <div className="min-h-screen">
@@ -41,16 +43,22 @@ export default function Home() {
             <FaFire className="text-orange-500 text-xl" />
           </div>
           <div>
-            <h2 className="text-3xl font-bold text-gray-900">Trending Destinations</h2>
-            <p className="text-gray-500">Most popular choices for travelers from Sweden</p>
+            <h2 className="text-3xl font-bold text-gray-900">Trending Stockholm</h2>
+            <p className="text-gray-500">Real-time offers available right now in Sweden's capital</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredHotels.map((hotel) => (
-            <HotelCard key={hotel.id} hotel={hotel} />
-          ))}
-        </div>
+        {displayHotels.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {displayHotels.map((hotel) => (
+              <HotelCard key={hotel.id} hotel={hotel} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-20 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+            <p className="text-gray-500">Searching for the best offers...</p>
+          </div>
+        )}
       </section>
     </div>
   );

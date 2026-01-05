@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Hotel } from '@/lib/mockData';
+import { Hotel } from "@/types/hotels";
 import { searchHotels } from '@/lib/api';
 
 export function useHotelSearch(
