@@ -274,3 +274,284 @@ npm test
 ```
 
 
+
+Leverans 2 – Dokumentation och teknisk reflektion
+
+Projekt: StayEase (Hotell­sökning / Bokningsapp)
+Teknik: Next.js (App Router) + React + TypeScript + Tailwind CSS + Amadeus API (eller Mock)
+Kurs: Ramverk och komponentbaserad utveckling (Frontend)
+
+1. Projektbeskrivning och användarbehov
+Sammanfattning
+
+StayEase är en hotellbokningsliknande applikation där användare kan söka hotell baserat på stad och datum, visa resultat som hotellkort, navigera till en detaljsida för varje hotell och hantera bokningar (simulerade). Projektet demonstrerar komponentbaserad utveckling, routing, state-hantering, API-integration samt grundläggande testning.
+
+Målgrupp
+
+Användare som snabbt vill utforska hotell i en specifik stad och jämföra alternativ innan de går vidare till en riktig bokningsleverantörs webbplats (eller ett framtida bokningsflöde).
+
+Tänkta användarfall
+
+Söka hotell baserat på stad samt valfritt in- och utcheckningsdatum och antal gäster
+
+Visa sökresultat med laddningsstatus (skeleton) och felhantering
+
+Klicka på ett hotellkort för att visa en detaljsida med mer information och bekvämligheter
+
+Skapa en simulerad bokning och visa den i profilsidan (om användaren är inloggad)
+
+Logga in med Google eller en demo-användare
+
+StayEase – Hotellbokningsapplikation (Projektöversikt)
+
+StayEase är byggd med Next.js (App Router), TypeScript och Tailwind CSS. Applikationen innehåller hotellsök, hotelldetaljer, bokningshantering (simulerad) och autentisering.
+
+Huvudfunktioner
+
+Sök: Hitta hotell baserat på plats, in-/utcheckningsdatum och antal gäster
+
+Detaljer: Visa hotellbeskrivning, bekvämligheter och grundläggande platsinformation
+
+Bokning (simulerad): Skapa bokningar och visa dem i profilsidan
+
+Autentisering: Logga in med Google eller använd en demo-användare
+
+Responsivt gränssnitt: Mobilförst-design med ett modernt och rent utseende
+
+Teknikstack
+
+Ramverk: Next.js 14 (App Router)
+
+Språk: TypeScript
+
+Styling: Tailwind CSS
+
+State-hantering: Zustand
+
+Autentisering: NextAuth.js
+
+Testning: Jest & React Testing Library
+
+Ikoner: React Icons
+
+Animationer: Framer Motion
+
+Kom igång
+
+Installera beroenden:
+
+npm install
+
+
+Starta utvecklingsservern:
+
+npm run dev
+
+
+Öppna:
+
+http://localhost:3000
+
+API och data
+
+Applikationen kan köras med ett Mock API (src/lib/api.ts) för att simulera extern datahämtning. Detta gör att appen fungerar end-to-end utan att kräva API-nycklar.
+
+För att byta till en riktig leverantör (t.ex. Amadeus) krävs att du:
+
+Skapar en API-nyckel hos leverantören
+
+Uppdaterar applikationen till att anropa riktiga endpoints (helst via Next.js API-routes)
+
+Lägger till miljövariabler i .env.local
+
+Notering: API-routes rekommenderas vid användning av riktiga API-nycklar för att undvika att exponera hemligheter i klienten och för att minska CORS-problem.
+
+Autentisering
+
+För Google-inloggning krävs följande variabler i .env.local:
+
+GOOGLE_CLIENT_ID=your-client-id
+GOOGLE_CLIENT_SECRET=your-client-secret
+NEXTAUTH_SECRET=your-secret-key
+
+
+För demo- och testsyfte finns även alternativet “Sign in as Demo User”.
+
+Testning
+
+Kör tester med:
+
+npm test
+
+2. Arkitektur och routing
+Sidor och navigationsstruktur
+
+(Justera vid behov om slutliga routes skiljer sig)
+
+/ – Startsida (introduktion / genväg till sök)
+
+/search – Sökresultatsida (hotellista)
+
+/hotels/[id] – Hotelldetaljsida (dynamisk route)
+
+/login – Inloggningssida
+
+/profile – Profil- och bokningsöversikt (kräver inloggning)
+
+Motivering av struktur
+
+Next.js App Router valdes eftersom den erbjuder tydlig filbaserad routing och gör dynamiska routes enkla att implementera (t.ex. /hotels/[id]). Den möjliggör även API-routes i samma projekt, vilket passar bra för extern API-integration och för att hålla API-nycklar säkra på serversidan.
+
+3. Komponentstruktur
+Centrala komponenter (exempel)
+
+Navbar – Huvudnavigering och aktiv länk
+
+SearchForm – Sökinmatning (stad, datum, gäster)
+
+SearchResults – Renderar resultatlista + tomt/laddning/fel-läge
+
+HotelCard – Återanvändbart kort för hotellinformation
+
+BookingSection – Bokningsgränssnitt (simulerat) på detaljsidan
+
+StarRating / UI-komponenter – Små återanvändbara UI-delar
+
+Exempel på återanvändbar komponent: HotelCard
+
+HotelCard används där hotell visas (sökresultat och potentiellt i profil/favoriter). Komponenten tar emot ett typat Hotel-objekt via props och ansvarar endast för rendering och navigation, inte datahämtning. Detta gör komponenten återanvändbar, testbar och lättare att underhålla.
+
+4. State-hantering och hooks
+Lokalt state – vad och varför
+
+Lokalt state används för UI-specifika delar som inte behöver delas globalt, till exempel:
+
+Formulärinmatningar
+
+UI-toggles (öppna/stäng meny)
+
+Komponentlokala laddningsstatusar
+
+Globalt state – vad och varför
+
+Globalt state (t.ex. med Zustand) används för data som delas mellan flera delar av applikationen, såsom:
+
+Bokningar eller sparade objekt
+
+UI-beteenden kopplade till användarsession
+
+Delade sökfilter eller senaste sökning
+
+Custom hook (krav)
+
+En custom hook (t.ex. useHotelSearch) skapades för att kapsla in:
+
+Datahämtning från API-routes
+
+Hantering av laddningsstatus (inkl. skeleton UI)
+
+Felhantering
+
+Returnering av slutligt hotellresultat
+
+Varför en hook?
+Hooks separerar logik från UI, minskar duplicerad kod och gör lösningen mer läsbar, testbar och lättare att vidareutveckla.
+
+5. Kodstruktur och projektorganisation
+Mappstruktur (exempel)
+
+src/app/ – Sidor och routing (App Router)
+
+src/app/api/ – API-routes (server-side integration)
+
+src/components/ – Återanvändbara UI- och feature-komponenter
+
+src/hooks/ – Custom hooks
+
+src/lib/ – API-hjälpfunktioner, utilities, transformationer
+
+src/types/ – TypeScript-typer och interfaces
+
+Motivering
+
+Strukturen syftar till tydlig ansvarsfördelning:
+
+UI-komponenter fokuserar på rendering
+
+Hooks och lib-funktioner hanterar logik och data
+
+API-routes isolerar extern API-integration och skyddar hemligheter
+
+6. Testning
+Vad jag testade och varför
+
+Komponenttester för återanvändbara UI-komponenter (t.ex. Button som renderas korrekt, hanterar klick och applicerar rätt variant-styling).
+Dessa tester verifierar grundläggande UI-beteende såsom tillgänglighet (korrekt roll och etikett), interaktion (klickhantering) och visuell konsekvens (Tailwind-klasser).
+
+Testerna ger snabb feedback under utveckling och skyddar mot regressioner vid refaktorering av delade komponenter.
+
+Vad jag skulle testa i nästa steg
+
+Tester för custom hook (useHotelSearch) med mockad fetch
+
+Integrationstest av hela flödet: sök → resultat → klick → detaljsida
+
+Tester av API-routes med mockade Amadeus-svar
+
+7. Teknikval, trade-offs och reflektion
+Varför Next.js + React + TypeScript
+
+React stödjer komponentbaserad arkitektur och återanvändbara UI-mönster
+
+Next.js App Router ger routing och serverfunktionalitet direkt
+
+TypeScript ger typsäkerhet och ett konsekvent Hotel-modellflöde från API till UI
+
+API-val och begränsningar
+
+Projektet integrerar ett hotellsöknings-API (Amadeus). En kompromiss är att externa API:er ofta har begränsningar (t.ex. saknade bilder/betyg eller inkonsekventa fält). Detta hanteras med fallbacks (standardbilder, förenklade betyg och säker optional chaining).
+
+Server vs klient – trade-off
+
+API-routes används som ett serverlager mellan klienten och externa API:er.
+
+Fördelar: skyddar API-nycklar, minskar CORS-problem, möjliggör konsekvent datatransformation
+Nackdelar: extra lager och ökad komplexitet
+
+Kort- och långsiktig påverkan
+
+Kort sikt: längre implementationstid eftersom hela dataflödet måste fungera korrekt
+
+Lång sikt: bättre underhållbarhet, testbarhet och skalbarhet
+
+Förbättringar i nästa iteration
+
+Förbättrad bildhantering (flera datakällor eller egen mapping)
+
+Starkare felhantering och UX för edge cases
+
+Cachingstrategier för upprepade sökningar
+
+Mer enhetlig datatransformation
+
+Notering om AI-verktyg
+
+Jag använde AI-verktyg främst som stöd vid felsökning och för att utforska alternativa lösningar, särskilt kring Next.js dynamisk routing (/hotels/[id]), server/klient-gränser samt API-integration med Amadeus (val av korrekt SDK-metod och anpassning av request/response-format).
+
+För att säkerställa att jag förstod och kontrollerade koden verifierade jag alltid förslag genom att läsa felmeddelanden i terminalen, testa hela användarflöden lokalt (sök → klick → detaljsida), inspektera API-responser och refaktorera den slutliga lösningen till en struktur som jag kan förklara och försvara vid kodgranskning.
+
+Appendix (valfritt) – Köra projektet lokalt
+npm install
+npm run dev
+
+
+Öppna:
+
+http://localhost:3000
+
+
+Tester:
+
+npm test
+
+
