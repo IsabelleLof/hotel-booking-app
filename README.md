@@ -1,6 +1,8 @@
 
 ![Overview of the app arcitecture](image.png)
 
+# Github repo: https://github.com/IsabelleLof/hotel-booking-app 
+
 # Delivery 2 – Documentation and Technical Reflection
 
 **Project:** StayEase (Hotel Finder / Booking App)
