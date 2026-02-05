@@ -11,6 +11,10 @@ const amadeus = new Amadeus({
 });
 
 //regex
+//Amadeus API kräver ett strikt format för datum. 
+//Den här funktionen fungerar som ett filter som 
+// tar emot datum i olika format och 'tvättar' dem 
+// så att de alltid blir en korrekt sträng med år, månad och dag.
 
 function toYMD(value: string | null) {
   if (!value) return undefined;

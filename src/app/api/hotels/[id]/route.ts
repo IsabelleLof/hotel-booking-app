@@ -12,6 +12,12 @@ const amadeus = new Amadeus({
 });
 
 //Regex?
+//Funktionen är en datavalidering. 
+// Eftersom vår frontend och externa API:er 
+// ofta pratar olika 'språk' när det gäller datum, 
+// så säkerställer denna hjälpfunktion att vi alltid skickar 
+// korrekt formaterad data till Amadeus. Det förhindrar 400-fel 
+// (Bad Request) från API:et
 
 function toYMD(value: string | null) {
   if (!value) return undefined;
