@@ -1,5 +1,6 @@
 import SearchForm from '@/components/features/SearchForm';
 import HotelCard from '@/components/features/HotelCard';
+import GlobalHotelsSection from '@/components/features/GlobalHotelsSection';
 import { searchHotelsServer } from '@/lib/api.server';
 import { FaFire } from 'react-icons/fa';
 import { Hotel } from '@/types/hotels';
@@ -35,6 +36,9 @@ export default async function Home() {
           <SearchForm />
         </div>
       </section>
+
+      {/* Global Search Results (Client-side) */}
+      <GlobalHotelsSection />
 
       {/* Featured Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">

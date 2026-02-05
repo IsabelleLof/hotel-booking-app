@@ -10,6 +10,8 @@ const amadeus = new Amadeus({
   clientSecret: process.env.AMADEUS_CLIENT_SECRET!,
 });
 
+//regex
+
 function toYMD(value: string | null) {
   if (!value) return undefined;
   if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value; // redan YYYY-MM-DD

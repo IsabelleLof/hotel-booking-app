@@ -1,33 +1,24 @@
 import { useState, useEffect } from 'react';
-import { Hotel } from "@/types/hotels";
-import { searchHotels } from '@/lib/api';
+import { useStore } from '@/lib/store';
 
 export function useHotelSearch(
   initialQuery: string = '',
   checkInDate?: string,
   checkOutDate?: string
 ) {
+  const { hotels, loading, error, performSearch } = useStore();
   const [query, setQuery] = useState(initialQuery);
-  const [hotels, setHotels] = useState<Hotel[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchHotels = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const results = await searchHotels(query, checkInDate, checkOutDate);
-        setHotels(results);
-      } catch (err) {
-        setError('Failed to fetch hotels. Please try again.');
-      } finally {
-        setLoading(false);
+    const triggerSearch = async () => {
+      // Only search if there's a query
+      if (query) {
+        await performSearch(query, checkInDate, checkOutDate);
       }
     };
 
-    fetchHotels();
-  }, [query, checkInDate, checkOutDate]);
+    triggerSearch();
+  }, [query, checkInDate, checkOutDate, performSearch]);
 
   return { query, setQuery, hotels, loading, error };
 }
