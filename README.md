@@ -1,6 +1,10 @@
 
 ![Overview of the app arcitecture](image.png)
 
+![hooksuseHotelSearch ts](https://github.com/user-attachments/assets/d2dd6f11-555e-4dfb-b934-d5fb294acf10)
+
+
+
 # Github repo: https://github.com/IsabelleLof/hotel-booking-app 
 
 # Delivery 2 – Documentation and Technical Reflection
